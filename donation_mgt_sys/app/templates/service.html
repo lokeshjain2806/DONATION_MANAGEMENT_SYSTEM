@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}| About{% endblock title %}
+{% block content %}
+        <div class="divider col-sm-12 col-xs-12 col-md-12">
+            <div class="header-text"> Our <span>Services</span></div>
+        </div>
+
+        <section id="blog-isotope" class="subpage bg-white">
+        <div class="overlay-light">
+            <div id="content" class="container">
+                <!-- posts -->
+                <div class="posts">
+                    <!-- post 1 -->
+                    <div class="post item col-md-4 col-xs-12 col-sm-4">
+                           <div class="panel">
+                                  <div class="panel-header">
+                                     <img src="{% static 'img/blog-bg-children-02.jpg' %}" class="img-responsive"  alt="image"/>
+                                  </div>
+                                  <div class="panel-body">
+                                       <h3 class="post-title"><a href="blog-post.html">Enrichment Camps</a></h3>
+
+                                        <p>Nam consequat lacus purus, ac hendrerit ipsum pellentesque ut. Mauris orci ante, sodales ut lorem sed, semper aliquam diam. Sit amet tellus velit lacus purus.</p>
+                                        <div class="pull-left"><a class="btn btn-black btn-xs" href="#"><span class="read-more">Read More</span></a></div>
+                                  </div>
+                                  <div class="panel-footer">
+                                    <div class="pull-right">
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <small>425</small>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                  </div>
+                            </div>
+                    </div>
+                    <!-- post 2 -->
+                    <div class="post item col-md-4 col-xs-12 col-sm-4">
+                           <div class="panel">
+                                  <div class="panel-header">
+                                     <img src="{% static 'img/gal-bg-feet-01.jpg' %}" class="img-responsive"  alt="image"/>
+                                  </div>
+                                  <div class="panel-body">
+                                       <h3 class="post-title"><a href="blog-post.html">Making it Right</a></h3>
+
+                                        <p>Duis ut enim nibh. Suspendisse auctor mi eros, eu fermentum nisi iaculis eget. In porta elementum imperdiet. Pellentesque sapien massa, efficitur ut ornare eu, placerat non lectus. Nam consequat lacus purus, ac hendrerit ipsum pellentesque ut. Mauris orci ante, sodales ut lorem sed, semper aliquam diam. Sit amet tellus velit lacus purus.</p>
+                                        <div class="pull-left"><a class="btn btn-black btn-xs" href="#"><span class="read-more">Read More</span></a></div>
+                                  </div>
+                                  <div class="panel-footer">
+                                    <div class="pull-right">
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <small>1022</small>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                  </div>
+                            </div>
+                    </div>
+                    <!-- post 3 -->
+                    <div class="post item col-md-4 col-xs-12 col-sm-4">
+                           <div class="panel">
+                                  <div class="panel-header">
+                                     <img src="{% static 'img/blog-bg-school-01.jpg' %}" class="img-responsive"  alt="image"/>
+                                  </div>
+                                  <div class="panel-body">
+                                       <h3 class="post-title"><a href="blog-post.html">Volunteer Spotlight</a></h3>
+
+                                        <p>Ac hendrerit ipsum pellentesque ut. Mauris orci ante, sodales ut lorem sed, semper aliquam diam. Sit amet tellus velit lacus purus.</p>
+                                        <div class="pull-left"><a class="btn btn-black btn-xs" href="#"><span class="read-more">Read More</span></a></div>
+                                  </div>
+                                  <div class="panel-footer">
+                                    <div class="pull-right">
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                        <small>1658</small>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                  </div>
+                            </div>
+                    </div>
+
+
+                <!-- pager -->
+                  <ul class="col-md-12 pager wow animated fadeIn">
+                    <li class="previous"><a href="#">&larr; Older</a></li>
+                    <li class="next"><a href="#">Newer &rarr;</a></li>
+                  </ul><!-- /end pager -->
+            </div>
+         </div><!-- /end overlay -->
+        </div>
+      </section><!--=== / END blog ===-->
+
+    <script>
+     $('.testimonials-slider').bxSlider({
+      slideWidth: 800,
+      minSlides: 1,
+      maxSlides: 1,
+      slideMargin: 32,
+      auto: true,
+      autoControls: true
+      });
+    </script>
+    <script type="text/javascript">
+    </script>
+{% endblock content %}
