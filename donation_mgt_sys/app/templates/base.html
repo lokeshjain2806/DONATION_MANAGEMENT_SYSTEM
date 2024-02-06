@@ -50,8 +50,8 @@
           </li>
 					<li><a href="{% url 'event' %}">Events</a></li>
 					<li><a href="{% url 'team' %}">Team</a></li>
-					<li><a href="{% url 'donate' %}">Donate</a></li>
-          <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+					<li><a href="{% url 'donate' %}">Sign Up</a></li>
 				</ul>
 			</div>
 		</div>
@@ -190,42 +190,20 @@
              <div id="wrapper">
             <!-- DEMO -->
                 <div class="testimonials-slider">
+                    {% for feedbacks in feedback %}
                   <div class="slide">
                     <div class="testimonials-carousel-thumbnail"><img width="120" alt=""
-                                                                      src="{% static 'images/team1.jpg' %}"></div>
+                                                                      src="{{ feedbacks.image.url }}"></div>
                       <div class="testimonials-carousel-context">
                         <div class="testimonials-name">
-                          Rub elvi <span>shuvohabib.com</span>
+                            {{ feedbacks.name }}
                         </div>
                         <div class="testimonials-carousel-content">
-                          <p>Sed posuere consectetur est at lobortis. Fusce dapibus, tellus ac cursus commodo.Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis. Fusce dapibus, tellus ac cursus commodo.</p>
+                          <p>{{ feedbacks.feedback }}</p>
                         </div>
                       </div>
                     </div>
-
-                    <div class="slide">
-                      <div class="testimonials-carousel-thumbnail">
-                        <img width="120" alt="" src="{% static 'images/team2.jpg' %}">
-                      </div>
-                      <div class="testimonials-carousel-context">
-                        <div class="testimonials-name">Jewel Jahan <span>technextit.com</span>
-                        </div>
-                        <div class="testimonials-carousel-content">
-                        <p>Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis. Fusce dapibus, tellus ac cursus commodo.</p>
-                        </div>
-                      </div>
-                    </div>
-
-                      <div class="slide">
-                        <div class="testimonials-carousel-thumbnail"><img width="120" alt=""
-                                                                          src="{% static 'images/team3.jpg' %}"></div>
-                          <div class="testimonials-carousel-context">
-                            <div class="testimonials-name">Mark Zuckerberg<span>www.Facebook.com</span></div>
-                              <div class="testimonials-carousel-content">
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal..</p>
-                              </div>
-                            </div>
-                      </div>
+                    {% endfor %}
                     </div>
                  <!-- END DEMO -->
                   <div class="clearfix"></div>
@@ -255,11 +233,11 @@
           <div class="footer-adress text-center col-xs-12 col-sm-4 col-md-4">
                 <h4>Great love for humanity</h4>
                 <ul class="footer-menus">
-                  <li><a href="{% url 'home' %}" style="color:white;">Home /</a></li>
+                  <li><a href="{% url 'home' %}" style="color:white;">Home</a></li><br />
                     <li><a href="{% url 'about' %}" style="color:white;">About </a></li><br />
-                    <li><a href="{% url 'services' %}" style="color:white;">Service /</a></li>
-                    <li><a href="{% url 'gallery' %}" style="color:white;">Gallery /</a></li>
-                    <li><a href="{% url 'contact' %}" style="color:white;">Contact</a></li>
+                    <li><a href="{% url 'services' %}" style="color:white;">Service</a></li><br />
+                    <li><a href="{% url 'gallery' %}" style="color:white;">Gallery</a></li><br />
+                    <li><a href="{% url 'contact' %}" style="color:white;">Contact</a></li><br />
                 </ul>
             </div>
             <div class="footer-second col-xs-12 col-sm-4 col-md-4">

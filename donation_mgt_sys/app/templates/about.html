@@ -35,37 +35,21 @@
                   </div>
 
                 </div><!-- END ONE THIRD COLUMNS -->
-
-
-
-
             </div><!-- END ROW -->
 
 			<section class="work-block">
 		        <div class="container">
 		          <div class="row">
 		            <div class="col-md-12">
+                        {% for ab in about %}
 		              <div class="col-md-4 col-xs-12 col-sm-12">
 		                <div class="box-img">
-		                    <img src="{% static 'img/1.jpg' %}"  width="100%" alt="" />
-                            <h3 class="titleimg-card">Life Survivors</h3>
-                            <p class="img-card">A family from Southern Africa needs your help.A family from Southern Africa needs your help.A family from Southern Africa needs your help.</p>
+		                    <img src="{{ ab.image.url }}"  width="100%" alt="" />
+                            <h3 class="titleimg-card">{{ ab.name }}</h3>
+                            <p class="img-card">{{ ab.description }}</p>
 		                  </div>
 		                 </div>
-		               <div class="col-md-4 col-xs-12 col-sm-12">
-                        <div class="box-img">
-                            <img src="{% static 'img/2.jpg' %}"  width="100%" alt="" />
-                            <h3 class="titleimg-card">Challenge Takers</h3>
-                            <p class="img-card">A family from Southern Africa needs your help.A family from Southern Africa needs your help.A family from Southern Africa needs your help.</p>
-                          </div>
-                         </div>
-		                 <div class="col-md-4 col-xs-12 col-sm-12">
-		                    <div class="box-img">
-		                        <img src="{% static 'img/3.jpg' %}" width="100%" alt="" />
-                            <h3 class="titleimg-card">Life at a stake</h3>
-                            <p class="img-card">A family from Southern Africa needs your help.A family from Southern Africa needs your help.A family from Southern Africa needs your help.</p>
-		                    </div>
-		                 </div>
+		               {% endfor %}
 		               </div>
 		          </div>
 		        </div>

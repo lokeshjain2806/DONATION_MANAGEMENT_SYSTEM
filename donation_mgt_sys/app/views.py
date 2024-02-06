@@ -1,17 +1,23 @@
 from django.shortcuts import render
+from .models import FeedbackModel, AboutModel, ServiceModel, GalleryModel
 
 # Create your views here.
 def home(request):
-    return render(request, 'base.html')
+    feedback = FeedbackModel.objects.all()
+    print(feedback)
+    return render(request, 'base.html', {'feedback': feedback})
 
 def about(request):
-    return render(request, 'about.html')
+    about = AboutModel.objects.all()
+    return render(request, 'about.html', {'about': about})
 
 def services(request):
-    return render(request, 'service.html')
+    service = ServiceModel.objects.all()
+    return render(request, 'service.html', {'service': service})
 
 def gallery(request):
-    return render(request, 'gallery.html')
+    gallery = GalleryModel.objects.all()
+    return render(request, 'gallery.html', {'gallery': gallery})
 
 def event(request):
     return render(request, 'event.html')
