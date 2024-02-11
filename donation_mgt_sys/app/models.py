@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from PIL import Image
 
@@ -74,10 +75,10 @@ class TeamModel(models.Model):
     name = models.CharField(max_length=150, verbose_name='Name')
     post = models.CharField(max_length=150, verbose_name='Post Name')
     description = models.TextField()
-    twitter = models.CharField(max_length=150, verbose_name='Twitter')
-    facebook = models.CharField(max_length=150, verbose_name='Facebook')
-    gmail = models.CharField(max_length=150, verbose_name='Gmail')
-    linkdin = models.CharField(max_length=150, verbose_name='Linkdin')
+    twitter = models.CharField(max_length=150, verbose_name='Twitter', null=True, blank=True)
+    facebook = models.CharField(max_length=150, verbose_name='Facebook', null=True, blank=True)
+    gmail = models.CharField(max_length=150, verbose_name='Gmail', null=True, blank=True)
+    linkdin = models.CharField(max_length=150, verbose_name='Linkdin', null=True, blank=True)
     created_at = models.DateField(auto_now=True)
     updated_at = models.DateField(null=True, blank=True)
 
@@ -94,3 +95,21 @@ class ContactModel(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SubscriptionModel(models.Model):
+    email = models.EmailField(verbose_name='Email Id')
+    created_at = models.DateField(auto_now=True)
+    updated_at = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return self.email
+
+
+class MyUser(AbstractUser):
+    REGISTRATION_CHOICES = [
+        ('Is Volunteers', 'Is Volunteers'),
+        ('Is Donor', 'Is Donor'),
+    ]
+    type = models.CharField(max_length=20, choices=REGISTRATION_CHOICES)
+    is_completed = models.BooleanField(default=False)

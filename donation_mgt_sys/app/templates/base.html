@@ -22,6 +22,7 @@
 </head>
 
 	<body>
+    {% block header %}
   	<div class="header container">
       <div class="visible-xs visible-sm col-xs-12 col-sm-12 text-center sm-logo">
         <a rel="home" href="{% url 'home' %}">
@@ -51,10 +52,12 @@
 					<li><a href="{% url 'event' %}">Events</a></li>
 					<li><a href="{% url 'team' %}">Team</a></li>
                     <li><a href="{% url 'contact' %}">Contact</a></li>
-					<li><a href="{% url 'donate' %}">Sign Up</a></li>
+					<li><a href="{% url 'login' %}">Sign In</a></li>
 				</ul>
 			</div>
 		</div>
+    {% endblock header %}
+
     {% block content %}
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 		  <!-- Indicators -->
@@ -109,75 +112,26 @@
     </div>
 
 			<section class="blog">
+                {% for blog in blogs %}
+
 				<div class="item col-md-4">
            <div class="blok-read-sm">
-             <a href="single1.html" class="hover-image">
-                <img src="{% static 'img/sea.jpg' %}" alt="image">
+             <a href="{% url 'blogdetails' blog.id %}" class="hover-image">
+                <img src="{{ blog.image.url }}" alt="image">
                 <span class="layer-block"></span>
              </a>
-              <div class="editor-choice">
-                  <i class="fa fa-star"></i>
-                  <a href="#">Editor’s Choice</a>
-              </div>
             <div class="content-block">
               <span class="point-caption bg-blue-point"></span>
               <span class="bottom-line bg-blue-point"></span>
-                <h4>Discovering OM: A visit back to The Vedas</h4>
-                <p>Gregor then turned to look out the window at the dull weather. Drops of rain could pane,which made..</p>
-                <div class="button-main bg-fio-point">read more</div>
-                 <div class="like-wrap">
-                     <a href="#"><i class="fa fa-heart col-red"></i></a><span>224</span>
-                     <a href="#"><i class="fa fa-comment col-green"></i></a><span>89</span>
-                 </div>
+                <h4>{{ blog.title }}</h4>
+                <p>{{ blog.about }}</p>
+                <div class="button-main bg-fio-point"><a href="{% url 'blogdetails' blog.id %}"
+                                                         style="color: white;">Read More</a></div>
             	</div>
             </div>
           </div>
-            <div class="item col-md-4">
-               <div class="blok-read-sm">
-                 <a href="single1.html" class="hover-image">
-                    <img src="{% static 'img/sea.jpg' %}" alt="image">
-                    <span class="layer-block"></span>
-                 </a>
-                  <div class="editor-choice">
-                      <i class="fa fa-star"></i>
-                      <a href="#">Editor’s Choice</a>
-                  </div>
-                <div class="content-block">
-                  <span class="point-caption bg-blue-point"></span>
-                  <span class="bottom-line bg-blue-point"></span>
-                    <h4>Discovering OM: A visit back to The Vedas</h4>
-                    <p>Gregor then turned to look out the window at the dull weather. Drops of rain could pane,which made..</p>
-                    <div class="button-main bg-fio-point">read more</div>
-                       <div class="like-wrap">
-                           <a href="#"><i class="fa fa-heart col-red"></i></a><span>224</span>
-                           <a href="#"><i class="fa fa-comment col-green"></i></a><span>89</span>
-                       </div>
-                	   </div>
-                    </div>
-                 </div>
-                <div class="item col-md-4">
-                   <div class="blok-read-sm">
-                       <a href="single1.html" class="hover-image">
-                          <img src="{% static 'img/sea.jpg' %}" alt="image">
-                          <span class="layer-block"></span>
-                       </a>
-                        <div class="editor-choice">
-                            <i class="fa fa-star"></i>
-                            <a href="#">Editor’s Choice</a>
-                        </div>
-                    <div class="content-block">
-                      <span class="point-caption bg-blue-point"></span>
-                      <span class="bottom-line bg-blue-point"></span>
-                        <h4>Discovering OM: A visit back to The Vedas</h4>
-                        <p>Gregor then turned to look out the window at the dull weather. Drops of rain could pane,which made..</p>
-                        <div class="button-main bg-fio-point">read more</div>
-                         <div class="like-wrap">
-                             <a href="#"><i class="fa fa-heart col-red"></i></a><span>224</span>
-                             <a href="#"><i class="fa fa-comment col-green"></i></a><span>89</span>
-                         </div>
-                    	</div>
-                    </div>
-                </div>
+
+                {% endfor %}
             </section>
 
 
@@ -213,9 +167,9 @@
                 <div class="subscribe">
                   <h4>Subscribe to Newsletter</h4>
                     <div class="email-field">
-                        <form action="">
+                        <form action="" method="post">{% csrf_token %}
                                <div class="email-input">
-                                  <input type="email" placeholder="Enter your email..." required>
+                                  <input name="mail" id="mail" type="email" placeholder="Enter your email..." required>
                                   <i class="fa fa-check col-green"></i>
                                </div>
                           <button type="submit" class="button-main bg-green">Submit</button>
