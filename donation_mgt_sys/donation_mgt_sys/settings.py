@@ -151,3 +151,7 @@ AUTH_USER_MODEL = 'app.MyUser'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACK = 'bootstrap5'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 600
+SESSION_SAVE_EVERY_REQUEST = True

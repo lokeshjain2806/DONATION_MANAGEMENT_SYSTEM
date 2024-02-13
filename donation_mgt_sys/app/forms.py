@@ -34,3 +34,12 @@ class LoginForm(forms.Form):
     class Meta:
         model = MyUser
         fields = ['username', 'password']
+
+
+class LoginOtpForm(forms.Form):
+    username = forms.CharField(label='Username',
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+class OtpVerificationForm(forms.Form):
+    otp = forms.IntegerField(label='Enter Your Otp', widget=forms.TextInput(attrs={'class': 'form-control'}))

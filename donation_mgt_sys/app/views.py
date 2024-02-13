@@ -1,12 +1,15 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import PasswordResetView
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.core.mail import send_mail
 from .models import FeedbackModel, AboutModel, ServiceModel, GalleryModel, TeamModel, ContactModel, BlogModel, \
     SubscriptionModel, MyUser
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, LoginOtpForm, OtpVerificationForm
 from django.contrib import messages
+import random
 
 
 # Create your views here.
@@ -61,13 +64,13 @@ class Login(View):
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
             if user:
-                a = user.last_login
+                a = user.is_completed
                 login(request, user)
-                if a is None:
+                if a is False:
                     if self.request.user.type == 'Is Volunteers':
-                        return HttpResponse("777777777777")
+                        return redirect('complete_profile')
                     else:
-                        return HttpResponse("6666666666")
+                        return HttpResponse("777777777777")
                 else:
                     login(request, user)
                     return HttpResponse("6666666666")
@@ -126,6 +129,76 @@ class RegistrationView(View):
                 password=form.cleaned_data['password1'],
                 type=form.cleaned_data['type'],
             )
-            return HttpResponse('Home')
+            return HttpResponse('home')
         else:
             return render(request, 'registration.html', {'form': form})
+
+
+class OtpLogin(View):
+    def get(self, request):
+        form = LoginOtpForm
+        return render(request, 'loginviaotp.html', {'form': form})
+
+    def post(self, request):
+        form = LoginOtpForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            a = MyUser.objects.filter(username=username).exists()
+            if a:
+                user = MyUser.objects.get(username=username)
+                num_numbers = 4
+                random_numbers = []
+                for i in range(num_numbers):
+                    random_1_digit = random.randint(1, 9)
+                    random_numbers.append(str(random_1_digit))
+                otp = int(''.join(random_numbers))
+                # print(otp)
+                request.session['user'] = user.id
+                # print('3')
+                request.session['expected_otp'] = otp
+                # print('4')
+                request.session.save()
+                print(otp)
+                # print('5')
+                subject = 'Login Verification'
+                message = f'Otp For Login: {otp}. Otp is valid for 10 minutes only.'
+                from_email = 'reset9546@gmail.com'
+                recipient_list = [user.email]
+                fail_silently = False
+                send_mail(subject, message, from_email, recipient_list, fail_silently)
+                return redirect('otp_verification')
+
+
+class OtpFun(View):
+    def get(self, request):
+        form = OtpVerificationForm
+        return render(request, 'otpverification.html', {'form': form})
+
+    def post(self, request):
+        form = OtpVerificationForm(request.POST)
+        entered_otp = request.POST.get('otp')
+        expected_otp = request.session.get('expected_otp')
+        user_id = request.session.get('user')
+        user = MyUser.objects.get(id=user_id)
+        if str(entered_otp) == str(expected_otp):
+            login(request, user)
+            return HttpResponse("55555555555555555")
+        else:
+            messages.error(request, 'OTP Not Valid')
+            return render(request, 'otpverification.html', {'form': form})
+
+
+class CustomPasswordResetView(PasswordResetView):
+    def form_valid(self, form):
+        try:
+            email = form.cleaned_data['email']
+            user = MyUser.objects.get(email=email)
+        except ObjectDoesNotExist:
+            messages.error(self.request, 'User with this email does not exist.')
+            return redirect('password-reset')
+        return super().form_valid(form)
+
+
+class Complete_Profile(View):
+    def get(self, request):
+        pass
