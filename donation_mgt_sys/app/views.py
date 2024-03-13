@@ -7,7 +7,7 @@ from django.views import View
 from django.core.mail import send_mail
 from .models import FeedbackModel, AboutModel, ServiceModel, GalleryModel, TeamModel, ContactModel, BlogModel, \
     SubscriptionModel, MyUser
-from .forms import RegistrationForm, LoginForm, LoginOtpForm, OtpVerificationForm
+from .forms import RegistrationForm, LoginForm, LoginOtpForm, OtpVerificationForm, SignUpFormDonor, VolunteerModelForm
 from django.contrib import messages
 import random
 
@@ -67,10 +67,7 @@ class Login(View):
                 a = user.is_completed
                 login(request, user)
                 if a is False:
-                    if self.request.user.type == 'Is Volunteers':
-                        return redirect('complete_profile')
-                    else:
-                        return HttpResponse("777777777777")
+                    return redirect('complete_profile')
                 else:
                     login(request, user)
                     return HttpResponse("6666666666")
@@ -79,6 +76,7 @@ class Login(View):
                 return render(request, 'signin.html', {'form': form})
         else:
             return render(request, 'signin.html', {'form': form})
+
 
 class Contact(View):
     def get(self, request):
@@ -152,14 +150,10 @@ class OtpLogin(View):
                     random_1_digit = random.randint(1, 9)
                     random_numbers.append(str(random_1_digit))
                 otp = int(''.join(random_numbers))
-                # print(otp)
                 request.session['user'] = user.id
-                # print('3')
                 request.session['expected_otp'] = otp
-                # print('4')
                 request.session.save()
                 print(otp)
-                # print('5')
                 subject = 'Login Verification'
                 message = f'Otp For Login: {otp}. Otp is valid for 10 minutes only.'
                 from_email = 'reset9546@gmail.com'
@@ -201,4 +195,12 @@ class CustomPasswordResetView(PasswordResetView):
 
 class Complete_Profile(View):
     def get(self, request):
-        pass
+        if request.user.type == 'Is Volunteers':
+            form = VolunteerModelForm
+            return render(request, 'complete_profile.html', {'form': form})
+        else:
+            form = SignUpFormDonor
+            return render(request, 'complete_profile.html', {'form': form})
+
+
+

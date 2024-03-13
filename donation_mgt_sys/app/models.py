@@ -70,6 +70,7 @@ class GalleryModel(models.Model):
     def __str__(self):
         return self.title
 
+
 class TeamModel(models.Model):
     image = models.ImageField(upload_to='team_images/', verbose_name='Team Image')
     name = models.CharField(max_length=150, verbose_name='Name')
@@ -113,3 +114,81 @@ class MyUser(AbstractUser):
     ]
     type = models.CharField(max_length=20, choices=REGISTRATION_CHOICES)
     is_completed = models.BooleanField(default=False)
+
+
+class DonorModel(models.Model):
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE, related_name='donor_user')
+    profile_image = models.ImageField(upload_to='profile_images/', verbose_name='Profile Image', default='default_profile.png')
+    name = models.CharField(max_length=100, verbose_name='Full Name')
+    email = models.EmailField(verbose_name='Email Id', unique=True)
+    mobile_number = models.BigIntegerField(verbose_name='Mobile Number')
+    id_proof = models.FileField(upload_to='resumes/', verbose_name='Aadhaar Card')
+    created_at = models.DateField(auto_now=True)
+    updated_at = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Job Seeker'
+        verbose_name_plural = 'Job Seekers'
+        permissions = [
+            ("can_view_donors_custom", "Can View Job Donors Custom"),
+        ]
+
+
+class VolunteerModel(models.Model):
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE, related_name='donation_recruiter')
+    company_image = models.ImageField(upload_to='company_images/', verbose_name='Company Image')
+    company_name = models.CharField(max_length=100, verbose_name='Company Full Name')
+    lic_no = models.CharField(max_length=15, verbose_name='Licence Number')
+    lic_doc = models.FileField(upload_to='gst_documents/', verbose_name='Upload Licence Proof')
+    email_id = models.EmailField(verbose_name='Email Id', unique=True)
+    mobile_number = models.BigIntegerField(verbose_name='Mobile Number')
+    created_at = models.DateField(auto_now=True)
+    updated_at = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return self.company_name
+
+    class Meta:
+        verbose_name = 'Volunteer'
+        verbose_name_plural = 'Volunteers'
+        permissions = [
+            ("can_view_volunteer_custom", "Can View Volunteer Custom"),
+        ]
+
+
+class Donation(models.Model):
+    DONATION_TYPE_CHOICES = (
+        ('money', 'Money'),
+        ('goods', 'Goods'),
+        ('time', 'Time'),
+        ('food', 'Food'),
+        ('clothing', 'Clothing'),
+        ('books', 'Books'),
+        ('toys', 'Toys'),
+        ('electronics', 'Electronics'),
+        ('furniture', 'Furniture'),
+        ('medical_supplies', 'Medical Supplies'),
+        ('vehicles', 'Vehicles'),
+        ('appliances', 'Appliances'),
+        ('artwork', 'Artwork'),
+        ('sports_equipment', 'Sports Equipment'),
+        ('tools', 'Tools'),
+    )
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    applicants = models.ManyToManyField(VolunteerModel, related_name="applied_donation", blank=True)
+    recuiter = models.ForeignKey(DonorModel, related_name='volunteer', null=True, on_delete=models.CASCADE)
+    donation_title = models.CharField(max_length=100)
+    donation_description = models.TextField()
+    company_name = models.CharField(max_length=100)
+    company_image = models.ImageField(upload_to='company_images/', verbose_name='Company Image', null=True)
+    donation_location = models.CharField(max_length=100)
+    donation_type = models.CharField(max_length=20, choices=DONATION_TYPE_CHOICES)
+    contact_information = models.CharField(max_length=100)
+    created_at = models.DateField(auto_now=True)
+    updated_at = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return self.donation_title
