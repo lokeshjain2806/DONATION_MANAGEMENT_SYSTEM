@@ -1,4 +1,6 @@
-from django.contrib.auth import authenticate, login
+from urllib import request
+
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import PasswordResetView
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -6,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.core.mail import send_mail
 from .models import FeedbackModel, AboutModel, ServiceModel, GalleryModel, TeamModel, ContactModel, BlogModel, \
-    SubscriptionModel, MyUser
+    SubscriptionModel, MyUser, VolunteerModel, DonorModel
 from .forms import RegistrationForm, LoginForm, LoginOtpForm, OtpVerificationForm, SignUpFormDonor, VolunteerModelForm
 from django.contrib import messages
 import random
@@ -70,7 +72,7 @@ class Login(View):
                     return redirect('complete_profile')
                 else:
                     login(request, user)
-                    return HttpResponse("6666666666")
+                    return redirect('login_view')
             else:
                 messages.error(request, 'Username Or Password is invalid')
                 return render(request, 'signin.html', {'form': form})
@@ -127,7 +129,7 @@ class RegistrationView(View):
                 password=form.cleaned_data['password1'],
                 type=form.cleaned_data['type'],
             )
-            return HttpResponse('home')
+            return redirect('login')
         else:
             return render(request, 'registration.html', {'form': form})
 
@@ -175,8 +177,13 @@ class OtpFun(View):
         user_id = request.session.get('user')
         user = MyUser.objects.get(id=user_id)
         if str(entered_otp) == str(expected_otp):
+            a = user.is_completed
             login(request, user)
-            return HttpResponse("55555555555555555")
+            if a is False:
+                return redirect('complete_profile')
+            else:
+                login(request, user)
+                redirect('login_view')
         else:
             messages.error(request, 'OTP Not Valid')
             return render(request, 'otpverification.html', {'form': form})
@@ -202,5 +209,35 @@ class Complete_Profile(View):
             form = SignUpFormDonor
             return render(request, 'complete_profile.html', {'form': form})
 
+    def post(self, request):
+        if request.user.type == 'Is Volunteers':
+            form = VolunteerModelForm(request.POST, request.FILES)
+            if form.is_valid():
+                volunteer_data = form.cleaned_data
+                volunteer_data['user'] = request.user
+                volunteer = VolunteerModel(**volunteer_data)
+                volunteer.save()
+                request.user.is_completed = True
+                request.user.save()
+                return HttpResponse("ppppppppp")
+        else:
+            form = SignUpFormDonor(request.POST,  request.FILES)
+            if form.is_valid():
+                donor_data = form.cleaned_data
+                donor_data['user'] = request.user
+                donor = DonorModel(**donor_data)
+                donor.save()
+                request.user.is_completed = True
+                request.user.save()
+                return redirect('login_view')
+            return render(request, 'complete_profile.html', {'form': form})
 
 
+class UserLogout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('home')
+
+
+def login_view(request):
+    return render(request, 'login_home.html')

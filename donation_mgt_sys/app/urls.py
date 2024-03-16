@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 from .views import Home, about, services, gallery, event, team, Login, Contact, Blog, RegistrationView ,\
-    Complete_Profile, OtpLogin, OtpFun, CustomPasswordResetView
+    Complete_Profile, OtpLogin, OtpFun, CustomPasswordResetView, UserLogout, login_view
 from django.contrib.auth.views import (
     PasswordResetDoneView,
     PasswordResetConfirmView,
@@ -47,5 +47,7 @@ urlpatterns = [
     path('password-reset-complete/',
          PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
          name='password_reset_complete'),
+    path('logout/', UserLogout.as_view(), name='logout'),
+    path('home/', login_view, name='login_view'),
 
 ]

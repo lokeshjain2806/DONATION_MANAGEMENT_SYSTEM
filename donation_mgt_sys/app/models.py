@@ -130,8 +130,8 @@ class DonorModel(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Job Seeker'
-        verbose_name_plural = 'Job Seekers'
+        verbose_name = 'Donor Model'
+        verbose_name_plural = 'Donor Model'
         permissions = [
             ("can_view_donors_custom", "Can View Job Donors Custom"),
         ]
