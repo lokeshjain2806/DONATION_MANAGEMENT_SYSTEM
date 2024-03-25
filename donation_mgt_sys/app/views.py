@@ -1,15 +1,18 @@
+from django.utils import timezone
 from urllib import request
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import PasswordResetView
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.views import View
 from django.core.mail import send_mail
 from .models import FeedbackModel, AboutModel, ServiceModel, GalleryModel, TeamModel, ContactModel, BlogModel, \
-    SubscriptionModel, MyUser, VolunteerModel, DonorModel
-from .forms import RegistrationForm, LoginForm, LoginOtpForm, OtpVerificationForm, SignUpFormDonor, VolunteerModelForm
+    SubscriptionModel, MyUser, VolunteerModel, DonorModel, Donation
+from .forms import RegistrationForm, LoginForm, LoginOtpForm, OtpVerificationForm, SignUpFormDonor, VolunteerModelForm, \
+    DonationForm
 from django.contrib import messages
 import random
 
@@ -240,4 +243,57 @@ class UserLogout(View):
 
 
 def login_view(request):
+    print(request.user.is_authenticated)
     return render(request, 'login_home.html')
+
+
+class Profile(View):
+    def get(self, request, pk):
+        user = get_object_or_404(MyUser, pk=pk)
+        if user.type == 'Is Volunteers':
+            volunteer = get_object_or_404(VolunteerModel, user=user)
+            form = VolunteerModelForm(instance=volunteer)
+            form.fields['email_id'].widget.attrs['readonly'] = 'readonly'
+        else:
+            donor = get_object_or_404(DonorModel, user=user)
+            form = SignUpFormDonor(instance=donor)
+            form.fields['email'].widget.attrs['readonly'] = 'readonly'
+        return render(request, 'profile.html', {'form': form, 'id': pk})
+
+    def post(self, request, pk):
+        user = get_object_or_404(MyUser, pk=pk)
+        if user.type == 'Is Volunteers':
+            volunteer = get_object_or_404(VolunteerModel, user=user)
+            form = VolunteerModelForm(request.POST, instance=volunteer)
+        else:
+            donor = get_object_or_404(DonorModel, user=user)
+            form = SignUpFormDonor(request.POST, instance=donor)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile', args=[pk]))
+        return render(request, 'profile.html', {'form': form, 'id': pk})
+
+
+class PostDonaton(View):
+    def get(self, request):
+        form = DonationForm
+        return  render(request, 'postdonation.html', {'form': form})
+
+    def post(self, request):
+        form = DonationForm(request.POST)
+        if form.is_valid():
+            volunteer = VolunteerModel.objects.get(user=request.user)
+            company_name = volunteer.company_name
+            donation = form.save(commit=False)
+            donation.user = request.user
+            donation.company_name = company_name
+            donation.save()
+            return render(request, 'postdonation.html', {'form': form})
+        return render(request, 'postdonation.html', {'form': form})
+
+
+class CheckDonation(View):
+    def get(self, request):
+        current_date = timezone.now().date()
+        donations = Donation.objects.filter(date_time__date__gte=current_date)
+        return render(request, 'check_donation.html', {'donations': donations})

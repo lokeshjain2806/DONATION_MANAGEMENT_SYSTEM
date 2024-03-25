@@ -187,6 +187,7 @@ class Donation(models.Model):
     donation_location = models.CharField(max_length=100)
     donation_type = models.CharField(max_length=20, choices=DONATION_TYPE_CHOICES)
     contact_information = models.CharField(max_length=100)
+    date_time = models.DateTimeField(null=True, blank=True)
     created_at = models.DateField(auto_now=True)
     updated_at = models.DateField(null=True, blank=True)
 

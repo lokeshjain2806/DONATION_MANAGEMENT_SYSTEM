@@ -23,15 +23,15 @@
 				<ul class="nav navbar-nav">
 					<li class="selected"><a href="{% url 'login_view' %}">Home</a></li>
                     {% if request.user.type == 'Is Volunteers' %}
-					<li><a href="">Post Donation</a></li>
+					<li><a href="{% url 'post_donate' %}">Post Donation</a></li>
                     {% else %}
-					<li><a href="">Check Donation</a></li>
+					<li><a href="{% url 'check_donation' %}">Check Donation</a></li>
                     {% endif %}
           <li class= "hidden-xs hidden-sm">
             <a rel="home"
                href="{% url 'login_view' %}"><img class="logo" src="{% static 'img/logo.png' %}" width="200" alt="logo"></a>
           </li>
-					<li><a href="">Profile</a></li>
+					<li><a href="{% url 'profile' pk=user.pk %}">Profile</a></li>
 					<li><a href="">Chat Bot</a></li>
 					<li><a href="{% url 'logout' %}">Logout</a></li>
 				</ul>
@@ -40,6 +40,46 @@
     {% endblock header %}
 {% block content %}
 
+		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+		  <!-- Indicators -->
+		  <ol class="carousel-indicators">
+		    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+		    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+		  </ol>
+
+		  <!-- Wrapper for slides -->
+		  <div class="carousel-inner" role="listbox">
+		    <div class="item active">
+		      <img src="{% static 'img/slide3.jpg' %}" alt="">
+		      <div class="carousel-caption">
+		        Make Donation
+		      </div>
+		    </div>
+		    <div class="item">
+		      <img src="{% static 'img/slide2.jpg' %}" alt="">
+		      <div class="carousel-caption">
+		        Be a Donator
+		      </div>
+		    </div>
+		    <div class="item">
+		      <img src="{% static 'img/slide1.jpg' %}" alt="">
+		      <div class="carousel-caption">
+		        Be a volunteer
+		      </div>
+		    </div>
+		  </div>
+
+		  <!-- Controls -->
+		  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+		    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+		    <span class="sr-only">Previous</span>
+		  </a>
+		  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+		    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+		    <span class="sr-only">Next</span>
+		  </a>
+		</div>
 
 
 {% endblock content %}

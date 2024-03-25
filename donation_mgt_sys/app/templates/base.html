@@ -187,11 +187,15 @@
           <div class="footer-adress text-center col-xs-12 col-sm-4 col-md-4">
                 <h4>Great love for humanity</h4>
                 <ul class="footer-menus">
+                    {% if request.user.is_authenticated %}
+                  <li><a href="{% url 'login_view' %}" style="color:white;">Home</a></li><br />
+                    {% else %}
                   <li><a href="{% url 'home' %}" style="color:white;">Home</a></li><br />
                     <li><a href="{% url 'about' %}" style="color:white;">About </a></li><br />
                     <li><a href="{% url 'services' %}" style="color:white;">Service</a></li><br />
                     <li><a href="{% url 'gallery' %}" style="color:white;">Gallery</a></li><br />
                     <li><a href="{% url 'contact' %}" style="color:white;">Contact</a></li><br />
+                    {% endif %}
                 </ul>
             </div>
             <div class="footer-second col-xs-12 col-sm-4 col-md-4">

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import MyUser, DonorModel, VolunteerModel
+from .models import MyUser, DonorModel, VolunteerModel, Donation
 
 
 class RegistrationForm(UserCreationForm):
@@ -74,3 +74,15 @@ class VolunteerModelForm(forms.ModelForm):
         self.fields['lic_doc'].widget.attrs.update({'class': 'form-control-file'})
         self.fields['email_id'].widget.attrs.update({'class': 'form-control'})
         self.fields['mobile_number'].widget.attrs.update({'class': 'form-control'})
+
+
+class DonationForm(forms.ModelForm):
+    date_time = forms.DateField(widget = forms.SelectDateWidget())
+    class Meta:
+        model = Donation
+        fields = ['donation_title', 'donation_description', 'donation_location', 'contact_information',  'date_time', 'donation_type']
+
+        def __init__(self, *args, **kwargs):
+            super(DonationForm, self).__init__(*args, **kwargs)
+            for field_name in self.fields:
+                self.fields[field_name].widget.attrs.update({'class': 'form-control'})
